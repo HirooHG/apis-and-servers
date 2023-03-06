@@ -1,7 +1,7 @@
 
-# Multi game websockets
+# apis-and-servers
 
-A dart websosckets server that'll power my tictactoe, poker and many others of my games online parties
+A dart server for my API, websockets exchanges and many more
 
 # Run the server
 

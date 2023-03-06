@@ -8,7 +8,6 @@ Future<void> main() async {
 
   await for (HttpRequest request in server) {
     var handler = await RequestHandler.init(req: request);
-    print("yay");
     if(handler == null) {
       print("cannot handle request");
     }
