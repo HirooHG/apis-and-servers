@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:multigamewebsocketsdart/requesthandler.dart';
+import 'package:multigamewebsocketsdart/handlers/requesthandler.dart';
 
 Future<void> main() async {
   var server = await HttpServer.bind(InternetAddress.anyIPv4, 3402);
