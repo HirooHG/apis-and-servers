@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:multigamewebsocketsdart/handlers/requesthandler.dart';
+import 'package:multigamewebsocketsdart/websockets/player.dart';
+
 
 Future<void> main() async {
   var server = await HttpServer.bind(InternetAddress.anyIPv4, 3402);
@@ -12,4 +14,9 @@ Future<void> main() async {
       print("cannot handle request");
     }
   }
+}
+
+abstract class GamePlayers {
+  static List<Player> playersTicTac = [];
+  static List<Player> playersPoker = [];
 }

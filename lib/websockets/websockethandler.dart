@@ -16,7 +16,6 @@ abstract class WebSocketHandler extends Handler {
 
   final WebSocket socket;
   final HttpRequest req;
-  final List<Player> players = [];
 
   void internal();
 }
