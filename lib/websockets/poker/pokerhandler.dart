@@ -7,7 +7,7 @@ class PokerHandler extends WebSocketHandler {
   PokerHandler({required super.req, required super.socket});
 
   @override
-  void internal() {
+  void internal(message) {
 
   }
 }

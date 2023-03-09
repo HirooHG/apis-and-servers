@@ -11,11 +11,11 @@ abstract class WebSocketHandler extends Handler {
     required this.socket,
     required this.req
   }) {
-    internal();
+    socket.listen(internal);
   }
 
   final WebSocket socket;
   final HttpRequest req;
 
-  void internal();
+  void internal(message);
 }

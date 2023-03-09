@@ -5,13 +5,15 @@ import 'package:multigamewebsocketsdart/websockets/player.dart';
 
 class TicTacToePlayer extends Player {
   TicTacToePlayer({
+    required super.socket,
     required super.name,
     required super.id,
     required this.points,
+    this.opponent
   });
 
-  String opponentId = "";
-  final int points;
+  int points;
+  TicTacToePlayer? opponent;
 
   @override
   String toJson() {

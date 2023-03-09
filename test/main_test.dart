@@ -12,29 +12,17 @@ void main() {
         "ws://localhost:3402/ws/tictactoe"
     );
 
-    socket2.listen((message) {
-      print("message received ${jsonDecode(message)}");
+    socket.listen((event) {
+      print("socket 1 received : $event");
+      print("socket 1 type : ${jsonDecode(event)["data"].runtimeType}");
     });
 
-    socket.listen((message) {
-      print("message received ${jsonDecode(message)}");
-      var id = jsonDecode(jsonDecode(message)["data"])["id"];
-      var close = {
-        "action": "close",
-        "data": id
-      };
-      final closeMsg = jsonEncode(close);
-      socket.add(closeMsg);
-      print("closed");
+    socket2.listen((event) {
+      print("socket 2 received : $event");
+      print("socket 2 type : ${jsonDecode(event)["data"].runtimeType}");
     });
 
-    const data = {
-      "action": "connect",
-      "data": ""
-    };
-    final msg = jsonEncode(data);
-
-    socket.add(msg);
-    socket2.add(msg);
+    socket.add(jsonEncode({"action": "connect"}));
+    socket2.add(jsonEncode({"action": "connect"}));
   });
 }
