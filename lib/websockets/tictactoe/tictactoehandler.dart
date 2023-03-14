@@ -29,6 +29,8 @@ class TicTacToeHandler extends WebSocketHandler {
         points: 0
       );
 
+      print(action);
+
     switch(action) {
       case "test":
         socket.add("test");
