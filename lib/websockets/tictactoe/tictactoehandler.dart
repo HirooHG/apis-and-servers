@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:multigamewebsocketsdart/websockets/websockethandler.dart';
 import 'tictactoeplayer.dart';
 import "../../main.dart";
@@ -12,33 +13,47 @@ class TicTacToeHandler extends WebSocketHandler {
     required super.socket
   });
 
+  TicTacToePlayer? player;
+
+  @override
+  void onDone() {
+    GamePlayers.playersTicTac.remove(player);
+    print("disconnected ${player!.name}");
+    broadcastPlayers();
+  }
+
+  @override
+  void onError() {
+    print("There was an error with ${player!.name}");
+    GamePlayers.playersTicTac.remove(player);
+    broadcastPlayers();
+  }
+
   @override
   void internal(message) async {
-      var json = jsonDecode(message);
+    var json = jsonDecode(message);
 
-      var action = json["action"];
-      var id = json["id"];
-      var msgData = json["data"];
+    var action = json["action"];
+    var id = json["id"];
+    var msgData = json["data"];
 
-      TicTacToePlayer? player = getById(id);
+    player = getById(id);
 
-      player ??= TicTacToePlayer(
-        socket: socket,
-        id: req.session.id,
-        name: msgData ?? "",
-        points: 0
-      );
-
-      print(action);
+    player ??= TicTacToePlayer(
+      socket: socket,
+      id: req.session.id,
+      name: msgData ?? "",
+      points: 0
+    );
 
     switch(action) {
       case "test":
         socket.add("test");
         break;
       case "connect":
-        player.name = msgData ?? "";
-        GamePlayers.playersTicTac.add(player);
-        socket.add(jsonEncode({"action": "connected", "data": player.toJson()}));
+        player!.name = msgData ?? "";
+        GamePlayers.playersTicTac.add(player!);
+        socket.add(jsonEncode({"action": "connected", "data": player!.toJson()}));
         broadcastPlayers();
         break;
       case "close":
@@ -50,11 +65,11 @@ class TicTacToeHandler extends WebSocketHandler {
         var data = jsonEncode({
           "action": "newGame",
           "data": jsonEncode({
-            "opponentId": player.id
+            "opponentId": player!.id
           })
         });
         var opponent = getById(jsonDecode(msgData)["opponentId"]);
-        player.opponent = opponent;
+        player!.opponent = opponent;
         opponent!.opponent = player;
         opponent.socket.add(data);
         break;
@@ -62,10 +77,10 @@ class TicTacToeHandler extends WebSocketHandler {
         var data = jsonEncode({
           "action": "lost",
         });
-        player.opponent!.points--;
-        player.points++;
-        player.opponent!.socket.add(data);
-        player.opponent = null;
+        player!.opponent!.points--;
+        player!.points++;
+        player!.opponent!.socket.add(data);
+        player!.opponent = null;
         break;
       case "play":
         var data = jsonEncode({
@@ -75,16 +90,16 @@ class TicTacToeHandler extends WebSocketHandler {
             "character": jsonDecode(msgData)["character"]
           })
         });
-        player.opponent!.socket.add(data);
+        player!.opponent!.socket.add(data);
         break;
       case "resign":
         var data = jsonEncode({
           "action": "resigned",
         });
-        player.opponent!.points++;
-        player.points--;
-        player.opponent!.socket.add(data);
-        player.opponent = null;
+        player!.opponent!.points++;
+        player!.points--;
+        player!.opponent!.socket.add(data);
+        player!.opponent = null;
         break;
     }
   }
