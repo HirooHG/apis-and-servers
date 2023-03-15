@@ -24,6 +24,6 @@ abstract class WebSocketHandler extends Handler {
   final HttpRequest req;
 
   void onDone();
-  void onError();
+  void onError(error);
   void internal(message);
 }

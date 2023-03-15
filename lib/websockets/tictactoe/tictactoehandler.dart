@@ -17,14 +17,18 @@ class TicTacToeHandler extends WebSocketHandler {
 
   @override
   void onDone() {
+    var text = (player != null) ? "disconnected ${player!.name}": "disconnected no one";
+    print(text);
+
     GamePlayers.playersTicTac.remove(player);
-    print("disconnected ${player!.name}");
     broadcastPlayers();
   }
 
   @override
-  void onError() {
-    print("There was an error with ${player!.name}");
+  void onError(error) {
+    var text = (player != null) ? "There was an error with ${player!.name}" : "there was an error with no one";
+    print(text);
+
     GamePlayers.playersTicTac.remove(player);
     broadcastPlayers();
   }

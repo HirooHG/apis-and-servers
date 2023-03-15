@@ -12,7 +12,7 @@ class PokerHandler extends WebSocketHandler {
   }
 
   @override
-  void onError() {
+  void onError(error) {
     // TODO: implement onError
   }
 
