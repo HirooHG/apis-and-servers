@@ -17,20 +17,20 @@ class TicTacToeHandler extends WebSocketHandler {
 
   @override
   void onDone() {
-    var text = (player != null) ? "disconnected ${player!.name}": "disconnected no one";
-    print(text);
-
-    GamePlayers.playersTicTac.remove(player);
-    broadcastPlayers();
+    if(player != null) {
+      print("disconnected ${player!.name}");
+      GamePlayers.playersTicTac.remove(player);
+      broadcastPlayers();
+    }
   }
 
   @override
   void onError(error) {
-    var text = (player != null) ? "There was an error with ${player!.name}" : "there was an error with no one";
-    print(text);
-
-    GamePlayers.playersTicTac.remove(player);
-    broadcastPlayers();
+    if(player != null) {
+      print("There was an error with ${player!.name}");
+      GamePlayers.playersTicTac.remove(player);
+      broadcastPlayers();
+    }
   }
 
   @override
@@ -40,8 +40,6 @@ class TicTacToeHandler extends WebSocketHandler {
     var action = json["action"];
     var id = json["id"];
     var msgData = json["data"];
-
-    player = getById(id);
 
     player ??= TicTacToePlayer(
       socket: socket,
@@ -68,11 +66,9 @@ class TicTacToeHandler extends WebSocketHandler {
       case "newGame":
         var data = jsonEncode({
           "action": "newGame",
-          "data": jsonEncode({
-            "opponentId": player!.id
-          })
+          "data": player!.id
         });
-        var opponent = getById(jsonDecode(msgData)["opponentId"]);
+        var opponent = getById(msgData);
         player!.opponent = opponent;
         opponent!.opponent = player;
         opponent.socket.add(data);
