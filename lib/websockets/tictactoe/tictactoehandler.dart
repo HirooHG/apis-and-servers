@@ -80,17 +80,11 @@ class TicTacToeHandler extends WebSocketHandler {
         player!.opponent!.points--;
         player!.points++;
         player!.opponent!.socket.add(data);
+        player!.opponent!.opponent = null;
         player!.opponent = null;
         break;
       case "play":
-        var data = jsonEncode({
-          "action": "play",
-          "data": jsonEncode({
-            "grid": jsonDecode(msgData)["grid"],
-            "character": jsonDecode(msgData)["character"]
-          })
-        });
-        player!.opponent!.socket.add(data);
+        player!.opponent!.socket.add(message);
         break;
       case "resign":
         var data = jsonEncode({
@@ -99,6 +93,7 @@ class TicTacToeHandler extends WebSocketHandler {
         player!.opponent!.points++;
         player!.points--;
         player!.opponent!.socket.add(data);
+        player!.opponent!.opponent = null;
         player!.opponent = null;
         break;
     }
