@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:multigamewebsocketsdart/websockets/websockethandler.dart';
 
 class PokerHandler extends WebSocketHandler {
-  PokerHandler({required super.req, required super.socket});
+  PokerHandler({required super.db, required super.req, required super.socket});
 
   @override
   void onDone() {

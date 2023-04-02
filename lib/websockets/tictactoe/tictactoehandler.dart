@@ -7,10 +7,10 @@ import 'tictactoeplayer.dart';
 import "../../main.dart";
 
 class TicTacToeHandler extends WebSocketHandler {
-
   TicTacToeHandler({
     required super.req,
-    required super.socket
+    required super.socket,
+    required super.db
   });
 
   TicTacToePlayer? player;
