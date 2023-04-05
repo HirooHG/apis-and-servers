@@ -1,48 +1,79 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:uuid/uuid.dart';
 
+import 'package:multigamewebsocketsdart/main.dart';
 import 'package:multigamewebsocketsdart/websockets/event/message.dart';
+import 'package:multigamewebsocketsdart/websockets/event/event.dart';
 
 class User {
 
-  String? id;
+  String id;
   String identifiant;
   String password;
   WebSocket socket;
+  Event? event;
 
-  User({this.id, required this.socket, required this.identifiant, required this.password});
+  User({
+    required this.id,
+    required this.event,
+    required this.socket,
+    required this.identifiant,
+    required this.password
+  });
 
-  User.fromMessage(Message msg, WebSocket sock) :
-      socket = sock,
-      id = jsonDecode(msg.data)["id"],
-      identifiant = jsonDecode(msg.data)["identifiant"],
-      password = jsonDecode(msg.data)["pwd"];
+  // factory
+  factory User.fromId(String id) {
+    return Events.users.singleWhere((element) => element.id == id);
+  }
+  factory User.fromMessage(Message msg, WebSocket sock) {
+    return User.fromJson(msg.data, sock);
+  }
+  factory User.fromJson(dynamic map, WebSocket sock) {
+    return User.fromMap(jsonDecode(map), sock);
+  }
 
-  User.fromJson(dynamic map, WebSocket sock) :
-      socket = sock,
-      id = jsonDecode(map)["id"],
-      identifiant = jsonDecode(map)["identifiant"],
-      password = jsonDecode(map)["pwd"];
+  // named
+  User.empty(WebSocket sock) :
+    id = Uuid().v4(),
+    password = "",
+    identifiant = "",
+    socket = sock,
+    event = null;
+  User.fromMap(Map<String, dynamic> map, WebSocket sock) :
+    id = map["id"],
+    socket = sock,
+    identifiant = map["identifiant"],
+    password = map["pwd"],
+    event = (map["eventId"] == null) ? null : Event.fromId(map["eventId"]);
 
+  // methods
+  String toJson(){
+    return jsonEncode(toMap());
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "identifiant": identifiant,
+      "pwd": password,
+      "eventId": event?.id
+    };
+  }
+
+  //override
   @override
   bool operator ==(Object other) {
     return other is User
         && id == other.id;
   }
-
-  String toJson(){
-    return jsonEncode({
-      "id": id,
-      "identifiant": identifiant,
-      "pwd": password
-    });
-  }
-
   @override
   String toString() {
-    return "id: $id\n"
+    return
+      "id: $id\n"
       "identifiant: $identifiant\n"
-      "pwd: $password";
+      "pwd: $password"
+      "event: ${event ?? "inscrit à aucun event"}";
   }
 }

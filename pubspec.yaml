@@ -4,7 +4,7 @@ version: 1.0.0
 # repository: https://github.com/my_org/my_repo
 
 environment:
-  sdk: '>=3.0.0-259.0.dev <4.0.0'
+  sdk: '>=2.19.6 <4.0.0'
 
 # Add regular dependencies here.
   # path: ^1.8.0
@@ -14,3 +14,4 @@ dev_dependencies:
   test: ^1.21.0
 dependencies:
   mongo_dart: ^0.9.0
+  uuid: ^3.0.7
