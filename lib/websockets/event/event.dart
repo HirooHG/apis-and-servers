@@ -11,14 +11,22 @@ class Event {
   String nom;
   String description;
   DateTime date;
-  List<User> users;
+  List<String> usersIds;
+
+  List<User> get users {
+    return usersIds.map(
+      (e) => Events.users.singleWhere(
+        (element) => element.id == e
+      )
+    ).toList();
+  }
 
   Event({
     required this.id,
     required this.nom,
     required this.description,
     required this.date,
-    required this.users
+    required this.usersIds
   });
 
   factory Event.fromMessage(Message msg) {
@@ -34,21 +42,29 @@ class Event {
   Event.fromMap(dynamic map) :
     id = map["id"],
     nom = map["nom"],
-    description = map["id"],
+    description = map["description"],
     date = DateTime.parse(map["date"]),
-    users = (map["users"] as List).map((e) => User.fromId(e)).toList();
+    usersIds = (map["users"] as List).map((e) => "$e").toList();
 
   Map<String, dynamic> toMap() {
     return {
       "id": id,
       "nom": nom,
       "description": description,
-      "data": date.toString(),
-      "users": users.map((e) => e.id).toList()
+      "date": date.toString(),
+      "users": usersIds
     };
   }
 
   String toJson() {
     return jsonEncode(toMap());
+  }
+
+  @override
+  String toString() {
+    return "nom: $nom\n"
+        "description: $description\n"
+        "date: $date\n"
+        "users: $users";
   }
 }

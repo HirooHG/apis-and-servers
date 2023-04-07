@@ -9,8 +9,8 @@ class Message {
   Message({required this.action, required this.data});
 
   Message.fromMap(dynamic map) :
-      action = jsonDecode(map)["action"],
-      data = jsonDecode(map)["data"];
+    action = jsonDecode(map)["action"],
+    data = jsonDecode(map)["data"];
 
   String call() {
     return jsonEncode({

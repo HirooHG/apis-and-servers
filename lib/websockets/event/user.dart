@@ -12,41 +12,49 @@ class User {
   String id;
   String identifiant;
   String password;
-  WebSocket socket;
-  Event? event;
+  WebSocket? socket;
+  String? eventId;
+
+  Event? get event {
+    return (eventId == null)
+        ? null
+        : Events.events.singleWhere((element) => element.id == eventId);
+  }
 
   User({
     required this.id,
-    required this.event,
-    required this.socket,
+    required this.eventId,
     required this.identifiant,
-    required this.password
+    required this.password,
+    this.socket,
   });
 
   // factory
-  factory User.fromId(String id) {
-    return Events.users.singleWhere((element) => element.id == id);
+  factory User.fromId(String id, WebSocket socket) {
+    var user = Events.users.singleWhere((element) => element.id == id);
+    user.socket = socket;
+    return user;
   }
-  factory User.fromMessage(Message msg, WebSocket sock) {
+  factory User.fromMessage(Message msg, WebSocket? sock) {
     return User.fromJson(msg.data, sock);
   }
-  factory User.fromJson(dynamic map, WebSocket sock) {
+  factory User.fromJson(dynamic map, WebSocket? sock) {
     return User.fromMap(jsonDecode(map), sock);
   }
 
   // named
-  User.empty(WebSocket sock) :
+  User.empty(WebSocket? sock) :
     id = Uuid().v4(),
     password = "",
     identifiant = "",
     socket = sock,
-    event = null;
-  User.fromMap(Map<String, dynamic> map, WebSocket sock) :
+    eventId = null;
+  User.fromMap(Map<String, dynamic> map, WebSocket? sock) :
     id = map["id"],
     socket = sock,
     identifiant = map["identifiant"],
     password = map["pwd"],
-    event = (map["eventId"] == null) ? null : Event.fromId(map["eventId"]);
+    eventId = map["eventId"];
 
   // methods
   String toJson(){
@@ -58,7 +66,7 @@ class User {
       "id": id,
       "identifiant": identifiant,
       "pwd": password,
-      "eventId": event?.id
+      "eventId": eventId
     };
   }
 
@@ -73,7 +81,7 @@ class User {
     return
       "id: $id\n"
       "identifiant: $identifiant\n"
-      "pwd: $password"
-      "event: ${event ?? "inscrit à aucun event"}";
+      "pwd: $password\n"
+      "event: ${eventId ?? "inscrit à aucun event"}";
   }
 }
