@@ -1,6 +1,4 @@
 
-import 'dart:io';
-
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:multigamewebsocketsdart/controllers/abstract_ws_controller.dart';
 import 'package:multigamewebsocketsdart/data/datasources/tictactoe/tictactoe_datasource.dart';
@@ -17,16 +15,22 @@ class TicTacToeController extends AbstractWsController {
 
   @override
   void onDone() {
-    print("disconnected ${player.name}");
-    TicTacToeDataSource.remove(player);
-    TicTacToeDataSource.broadcastPlayers();
+    quit("disconnected");
   }
 
   @override
   void onError(error) {
-    print("There was an error with ${player.name}");
-    TicTacToeDataSource.remove(player);
-    TicTacToeDataSource.broadcastPlayers();
+    quit("there was an error with");
+  }
+
+  void quit(String msg) {
+    try {
+      print("$msg ${player.name}");
+      TicTacToeDataSource.remove(player);
+      TicTacToeDataSource.broadcastPlayers();
+    } catch(e) {
+      print("player not initialized");
+    }
   }
 
   void init(Message msg) {
