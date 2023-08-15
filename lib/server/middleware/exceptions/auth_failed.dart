@@ -1,0 +1,2 @@
+
+class AuthFailed implements Exception {}

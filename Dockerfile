@@ -5,11 +5,11 @@ COPY pubspec.* ./
 RUN dart pub get
 COPY . .
 RUN dart pub get --offline
-RUN dart compile exe lib/main.dart -o lib/main
+RUN dart compile exe bin/api.dart -o bin/api
 
 FROM scratch
 COPY --from=build /runtime/ /
-COPY --from=build /apis-and-servers/lib/main /apis-and-servers/lib/
+COPY --from=build /apis-and-servers/bin/api /apis-and-servers/api/
 
 EXPOSE 3402
-CMD ["/apis-and-servers/lib/main"]
+CMD ["/apis-and-servers/bin/api"]

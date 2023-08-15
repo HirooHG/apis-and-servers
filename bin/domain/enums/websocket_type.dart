@@ -1,2 +1,0 @@
-
-enum WebsocketType { tictactoe, nope }

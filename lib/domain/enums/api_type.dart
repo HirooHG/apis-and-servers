@@ -1,0 +1,2 @@
+
+enum ApiType { japanimation }
