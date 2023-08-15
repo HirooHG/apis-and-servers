@@ -63,6 +63,9 @@ class GenController extends AbstractController {
 
     switch (type) {
       case ApiType.japanimation:
+        if(!(await verifyAudience(Audience.japanimation))) {
+          break;
+        }
         JapanimationController(
           request: request,
           authProvider: authProvider,
@@ -85,6 +88,10 @@ class GenController extends AbstractController {
 
     switch (type) {
       case WebsocketType.tictactoe:
+        if(!(await verifyAudience(Audience.japanimation))) {
+          break;
+        }
+
         final socket = await testWs(request);
         if(socket != null) {
           TicTacToeController(

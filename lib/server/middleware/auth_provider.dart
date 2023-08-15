@@ -11,8 +11,7 @@ import 'package:jaguar_jwt/jaguar_jwt.dart';
 class AuthProvider {
 
   static final AuthProvider _singleton = AuthProvider._internal();
-
-  factory AuthProvider() {
+factory AuthProvider() {
     return _singleton;
   }
 
@@ -38,7 +37,7 @@ class AuthProvider {
         String pwd = data[fieldPwd];
         String hash = _hash.create(pwd);
 
-        Map<String, dynamic> creds = {
+        final Map<String, dynamic> creds = {
           fieldName: user,
           fieldPwd: hash
         };
@@ -53,7 +52,7 @@ class AuthProvider {
           subject: user,
           issuer: issuer,
           audience: Audience.values.map((e) => e.getValue).toList(),
-          maxAge: const Duration(hours: 2)
+          maxAge: tokenAge
         );
 
         String token = issueJwtHS256(claim, secret);
