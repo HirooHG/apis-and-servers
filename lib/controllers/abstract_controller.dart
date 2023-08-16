@@ -16,6 +16,12 @@ abstract class AbstractController {
     }
   }
 
+  void noContent() {
+    request
+      ..response.statusCode = HttpStatus.noContent
+      ..response.close();
+  }
+
   void notImplemented() {
     request
       ..response.statusCode = HttpStatus.notImplemented

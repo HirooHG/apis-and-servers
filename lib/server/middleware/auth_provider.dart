@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:api/data/mongo_handler.dart';
 import 'package:api/server/middleware/constants.dart';
 import 'package:api/server/middleware/entities/response.dart';
+import 'package:api/server/middleware/entities/user_token.dart';
 import 'package:api/server/middleware/exceptions/auth_failed.dart';
 import 'package:api/server/middleware/hash.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';

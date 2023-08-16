@@ -5,11 +5,10 @@ part 'category.g.dart';
 
 @JsonSerializable()
 class Category extends BaseEntity {
-  final String id;
   final String name;
 
   const Category({
-    required this.id,
+    required super.id,
     required this.name,
   });
 

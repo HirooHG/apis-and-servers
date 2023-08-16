@@ -5,11 +5,10 @@ part 'spe.g.dart';
 
 @JsonSerializable()
 class Spe extends BaseEntity {
-  final String id;
   final String name;
 
   const Spe({
-    required this.id,
+    required super.id,
     required this.name,
   });
 
