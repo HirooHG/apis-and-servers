@@ -2,26 +2,23 @@ import 'dart:convert';
 
 import 'package:api/controllers/api/abstract_api_controller.dart';
 import 'package:api/controllers/api/japanimation/enum/japanimation_type.dart';
-import 'package:api/data/api/repositories/japanimation_repository.dart';
 import 'package:api/domain/entities/api/base_entity.dart';
 import 'package:api/domain/entities/api/japanimation/advertisement/advertisement.dart';
 import 'package:api/domain/entities/api/japanimation/category/category.dart';
 import 'package:api/domain/entities/api/japanimation/spe/spe.dart';
-import 'package:api/domain/extension/list_ext.dart';
+import 'package:api/common/extension/list_helper.dart';
 
 class JapanimationController extends AbstractApiController {
-
-  final JapanimationRepository repository;
 
   const JapanimationController({
     required super.request,
     required super.authProvider,
-    required this.repository,
+    required super.repository,
   });
   
   @override
   void get() async {
-    final type = _getType();
+    final type = _getJapType();
 
     switch (type) {
       case JapanimationType.spe:
@@ -44,7 +41,7 @@ class JapanimationController extends AbstractApiController {
 
   @override
   void put() async {
-    final type = _getType();
+    final type = _getJapType();
     final str = await utf8.decodeStream(request);
 
     try {
@@ -74,7 +71,7 @@ class JapanimationController extends AbstractApiController {
 
   @override
   void post() async {
-    final type = _getType();
+    final type = _getJapType();
     final str = await utf8.decodeStream(request);
 
     try {
@@ -104,7 +101,7 @@ class JapanimationController extends AbstractApiController {
 
   @override
   void delete() async {
-    final type = _getType();
+    final type = _getJapType();
     final str = await utf8.decodeStream(request);
 
     try {
@@ -134,7 +131,7 @@ class JapanimationController extends AbstractApiController {
 
   @override
   void patch() {
-    notImplemented();
+    methodNotAllowed();
   }
 
   Future<void> handlePost<T extends BaseEntity>(T entity) async {
@@ -152,15 +149,7 @@ class JapanimationController extends AbstractApiController {
     verifUpdate(isGood);
   }
 
-  void verifUpdate(bool isGood) {
-    if(isGood) {
-      noContent();
-    } else {
-      badRequest();
-    }
-  }
-
-  JapanimationType? _getType() {
+  JapanimationType? _getJapType() {
     final segment = getSegment(2);
     if (segment == null) {
       return null;

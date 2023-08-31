@@ -1,5 +1,5 @@
 
-import 'package:api/domain/extension/list_ext.dart';
+import 'package:api/common/extension/list_helper.dart';
 
 enum ApiMethodType {
   get,

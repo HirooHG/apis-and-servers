@@ -1,21 +1,24 @@
 
 import 'package:api/controllers/abstract_controller.dart';
-import 'package:api/domain/enums/api/api_method_type.dart';
+import 'package:api/common/enums/api/api_method_type.dart';
+import 'package:api/data/api/repositories/base_api_repository.dart';
 
 abstract class AbstractApiController extends AbstractController {
   
   const AbstractApiController({
     required super.request,
-    required super.authProvider
+    required super.authProvider,
+    required this.repository
   });
   
+  final BaseApiRepository repository;
+
   void handlerRequest() {
     final apiMethodType = ApiMethodType.getType(request.method);
 
     switch (apiMethodType) {
       case ApiMethodType.get:
-        get();
-        break;
+        get(); break;
       case ApiMethodType.post:
         post();
         break;
@@ -39,4 +42,12 @@ abstract class AbstractApiController extends AbstractController {
   void put();
   void delete();
   void patch();
+
+  void verifUpdate(bool isGood) {
+    if(isGood) {
+      noContent();
+    } else {
+      badRequest();
+    }
+  }
 }

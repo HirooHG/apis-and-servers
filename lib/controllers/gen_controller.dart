@@ -1,16 +1,19 @@
 import 'dart:io';
-
 import 'package:api/controllers/abstract_controller.dart';
+import 'package:api/controllers/api/admin/admin_controller.dart';
 import 'package:api/controllers/api/japanimation/japanimation_controller.dart';
 import 'package:api/controllers/ws/tictactoe/tictactoe_controller.dart';
+import 'package:api/data/api/datasources/admin_datasource.dart';
 import 'package:api/data/api/datasources/japanimation_datasource.dart';
+import 'package:api/data/api/repositories/admin_repository.dart';
 import 'package:api/data/api/repositories/japanimation_repository.dart';
+import 'package:api/data/mongo_handler.dart';
 import 'package:api/data/ws/tictactoe_datasource.dart';
-import 'package:api/domain/enums/api_type.dart';
-import 'package:api/domain/enums/request_type.dart';
-import 'package:api/domain/enums/websocket_type.dart';
-import 'package:api/domain/extension/list_ext.dart';
-import 'package:api/server/middleware/constants.dart';
+import 'package:api/common/enums/api_type.dart';
+import 'package:api/common/enums/request_type.dart';
+import 'package:api/common/enums/websocket_type.dart';
+import 'package:api/common/extension/list_helper.dart';
+import 'package:api/server/middleware/audience.dart';
 import 'package:api/server/middleware/entities/response.dart';
 
 class GenController extends AbstractController {
@@ -21,23 +24,27 @@ class GenController extends AbstractController {
   });
 
   void handleRequest() async {
-    if(request.uri.toString() == loginPath) {
-      await handleLogin();
-      return;
-    }
-
-    if(!(await verifyAudience(Audience.service))) {
-      return;
-    }
-
     final type = _getType();
+
 
     switch (type) {
       case RequestType.ws:
+        if(!(await verifyAudience(Audience.service))) {
+          break;
+        }
         _handleWs();
         break;
       case RequestType.api:
+        if(!(await verifyAudience(Audience.service))) {
+          break;
+        }
         _handleApi();
+        break;
+      case RequestType.login:
+        _handleLogin();
+        break;
+      case RequestType.admin:
+        _handleAdmin();
         break;
       default:
         notFound();
@@ -45,13 +52,25 @@ class GenController extends AbstractController {
     }
   }
 
-  Future<void> handleLogin() async {
+  void _handleLogin() async {
     final Response response = await authProvider.auth(request);
     if(response.isOk()) {
       success(response.token!);
     } else {
       forbidden();
     }
+  }
+
+  void _handleAdmin() async {
+    if(!(await verifyAudience(Audience.admin))) {
+      return;
+    }
+
+    AdminController(
+      request: request,
+      authProvider: authProvider,
+      repository: AdminRepository(dataSource: AdminDataSource(mongoHandler: MongoHandler()))
+    ).handlerRequest();
   }
 
   void _handleApi() async {
@@ -70,7 +89,7 @@ class GenController extends AbstractController {
           request: request,
           authProvider: authProvider,
           repository: JapanimationRepository(
-            dataSource: JapanimationDatasource()
+            dataSource: JapanimationDatasource(mongoHandler: MongoHandler())
           )
         ).handlerRequest();
         break;
@@ -106,14 +125,6 @@ class GenController extends AbstractController {
         notFound();
         break;
     }
-  }
-
-  Future<bool> verifyAudience(Audience audience) async {
-    final response = await authProvider.verify(request, Audience.ws);
-    if(!response.isOk()) {
-      forbidden();
-    }
-    return response.isOk();
   }
 
   Future<WebSocket?> testWs(HttpRequest req) async {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:api/server/middleware/audience.dart';
 import 'package:api/server/middleware/auth_provider.dart';
 
 abstract class AbstractController {
@@ -14,6 +15,14 @@ abstract class AbstractController {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<bool> verifyAudience(Audience audience) async {
+    final response = await authProvider.verify(request, audience);
+    if(!response.isOk()) {
+      forbidden();
+    }
+    return response.isOk();
   }
 
   void noContent() {
