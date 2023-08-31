@@ -24,4 +24,27 @@ class Advertisement extends BaseEntity {
 
   @override
   Map<String, dynamic> toJson() => _$AdvertisementToJson(this);
+
+  @override
+  ModifierBuilder getModifierBuilder() {
+    return ModifierBuilder()
+      .set("name", name)
+      .set("spe", spe?.toJson())
+      .set("category", category?.toJson());
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Advertisement
+      && other.id == id
+      && other.name == name;
+  }
+
+  @override
+  int get hashCode => int.tryParse(id
+    .split("")
+      .where((element) => int.tryParse(element) != null)
+      .join()
+      .substring(0, 6)
+  ) ?? -1;
 }

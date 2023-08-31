@@ -7,6 +7,7 @@ part of 'user_token.dart';
 // **************************************************************************
 
 UserToken _$UserTokenFromJson(Map<String, dynamic> json) => UserToken(
+      id: json['_id'] as String,
       name: json['name'] as String,
       pwd: json['pwd'] as String,
       audiences: (json['audiences'] as List<dynamic>)
@@ -15,6 +16,7 @@ UserToken _$UserTokenFromJson(Map<String, dynamic> json) => UserToken(
     );
 
 Map<String, dynamic> _$UserTokenToJson(UserToken instance) => <String, dynamic>{
+      '_id': instance.id,
       'name': instance.name,
       'pwd': instance.pwd,
       'audiences':
@@ -27,4 +29,5 @@ const _$AudienceEnumMap = {
   Audience.api: 'api',
   Audience.japanimation: 'japanimation',
   Audience.tictactoe: 'tictactoe',
+  Audience.admin: 'admin',
 };

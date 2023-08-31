@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:4.0.28
+    restart: unless-stopped
+    networks:
+      - dev
+  api:
+    container_name: api
+    image: api
+    build: .
+    restart: unless-stopped
+    networks: 
+      - dev
+    ports: 
+      - "3402:3402"
+    depends_on:
+      - mongo
+
+networks:
+  dev:
+    name: dev
+    driver: bridge
