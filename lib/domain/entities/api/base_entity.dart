@@ -4,10 +4,10 @@ abstract class BaseEntity {
   Map<String, dynamic> toJson();
 
   const BaseEntity({
-    required this.id
+    this.id
   });
 
-  final String id;
+  final String? id;
 
   ModifierBuilder getModifierBuilder();
 }

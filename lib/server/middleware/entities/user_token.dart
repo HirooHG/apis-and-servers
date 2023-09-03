@@ -13,7 +13,7 @@ class UserToken extends BaseEntity {
   final List<Audience> audiences;
 
   const UserToken({
-    required super.id,
+    super.id,
     required this.name,
     required this.pwd,
     required this.audiences,
@@ -34,20 +34,20 @@ class UserToken extends BaseEntity {
 
   List<String> get audiencesStr => audiences.map((e) => e.getValue).toList();
 
+  List<String> get audiencesNames => audiences.map((e) => e.name).toList();
+
   @override
-  int get hashCode => int.tryParse(id
-    .split("")
+  int get hashCode => int.parse(id?.split("")
       .where((element) => int.tryParse(element) != null)
       .join()
-      .substring(0, 6)
-  ) ?? -1;
+      .substring(0, 6) ?? "-1");
 
   @override
   ModifierBuilder getModifierBuilder() {
     return 
       ModifierBuilder()
         .set("name", name)
-        .set("spe", pwd)
-        .set("category", audiencesStr);
+        .set("pwd", pwd)
+        .set("audiences", audiencesNames);
   }
 }

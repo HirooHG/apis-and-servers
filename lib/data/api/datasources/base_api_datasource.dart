@@ -25,7 +25,7 @@ abstract class BaseApiDataSource {
 
   Future<bool> delete<T extends BaseEntity>(T entity) async {
     final DbCollection collection = getCollection<T>();
-    final result = await collection.deleteOne(entity.toJson());
+    final result = await collection.deleteOne(where.eq("_id", entity.id));
     return result.ok == 1.0;
   }
 

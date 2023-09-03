@@ -12,4 +12,4 @@ COPY --from=build /runtime/ /
 COPY --from=build /apis-and-servers/bin/api /apis-and-servers/bin/
 
 EXPOSE 3402
-CMD ["/apis-and-servers/bin/api"]
+CMD ["/apis-and-servers/bin/api", "docker"]
