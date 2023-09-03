@@ -9,7 +9,7 @@ class Spe extends BaseEntity {
   final String name;
 
   const Spe({
-    required super.id,
+    super.id,
     required this.name,
   });
 
@@ -32,10 +32,8 @@ class Spe extends BaseEntity {
   }
 
   @override
-  int get hashCode => int.tryParse(id
-    .split("")
+  int get hashCode => int.parse(id?.split("")
       .where((element) => int.tryParse(element) != null)
       .join()
-      .substring(0, 6)
-  ) ?? -1;
+      .substring(0, 6) ?? "-1");
 }

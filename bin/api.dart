@@ -1,6 +1,6 @@
 
 import 'package:api/api.dart';
 
-void main() async {
-  await server();
+void main(List<String> args) async {
+  await server(args);
 }

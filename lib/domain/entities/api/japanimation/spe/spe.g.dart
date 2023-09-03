@@ -7,7 +7,7 @@ part of 'spe.dart';
 // **************************************************************************
 
 Spe _$SpeFromJson(Map<String, dynamic> json) => Spe(
-      id: json['_id'] as String,
+      id: json['_id'] as String?,
       name: json['name'] as String,
     );
 

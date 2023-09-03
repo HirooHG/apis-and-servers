@@ -14,7 +14,8 @@ class MongoHandler {
 
   MongoHandler._internal();
 
-  Future<void> init() async {
+  Future<void> init(List<String> args) async {
+    final mongoAddress = args.isEmpty ? localAddress : dockerAddress;
     _db = Db("mongodb://$mongoAddress:$mongoPort");
     await _db.open();
   }
