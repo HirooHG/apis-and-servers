@@ -7,7 +7,7 @@ part of 'user_token.dart';
 // **************************************************************************
 
 UserToken _$UserTokenFromJson(Map<String, dynamic> json) => UserToken(
-      id: json['_id'] as String?,
+      id: json['_id'] as String,
       name: json['name'] as String,
       pwd: json['pwd'] as String,
       audiences: (json['audiences'] as List<dynamic>)

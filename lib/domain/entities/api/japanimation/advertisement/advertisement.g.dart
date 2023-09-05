@@ -8,7 +8,7 @@ part of 'advertisement.dart';
 
 Advertisement _$AdvertisementFromJson(Map<String, dynamic> json) =>
     Advertisement(
-      id: json['_id'] as String?,
+      id: json['_id'] as String,
       name: json['name'] as String,
       category: json['category'] == null
           ? null
