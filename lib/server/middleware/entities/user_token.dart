@@ -1,4 +1,3 @@
-
 import 'package:api/domain/entities/api/base_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:api/server/middleware/audience.dart';
@@ -19,35 +18,35 @@ class UserToken extends BaseEntity {
     required this.audiences,
   });
 
-  factory UserToken.fromJson(Map<String, dynamic> json) => _$UserTokenFromJson(json);
+  factory UserToken.fromJson(Map<String, dynamic> json) =>
+      _$UserTokenFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$UserTokenToJson(this);
 
   @override
   bool operator ==(Object other) {
-    return other is UserToken
-      && other.id == id
-      && other.name == name
-      && other.pwd == pwd;
+    return other is UserToken &&
+        other.id == id &&
+        other.name == name &&
+        other.pwd == pwd;
   }
 
-  List<String> get audiencesStr => audiences.map((e) => e.getValue).toList();
-
-  List<String> get audiencesNames => audiences.map((e) => e.name).toList();
+  List<String> get audiencesToString => audiences.map((e) => e.name).toList();
 
   @override
-  int get hashCode => int.parse(id?.split("")
-      .where((element) => int.tryParse(element) != null)
-      .join()
-      .substring(0, 6) ?? "-1");
+  int get hashCode => int.parse(id
+          ?.split("")
+          .where((element) => int.tryParse(element) != null)
+          .join()
+          .substring(0, 6) ??
+      "-1");
 
   @override
   ModifierBuilder getModifierBuilder() {
-    return 
-      ModifierBuilder()
+    return ModifierBuilder()
         .set("name", name)
         .set("pwd", pwd)
-        .set("audiences", audiencesNames);
+        .set("audiences", audiencesToString);
   }
 }
